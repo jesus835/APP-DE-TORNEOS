@@ -1093,8 +1093,6 @@
 
         // Function to submit tournament data
         async function submitTournament() {
-            console.log('🚀 Iniciando envío de torneo...');
-            
             const form = document.getElementById('tournamentForm');
             const formData = new FormData(form);
             
@@ -1108,17 +1106,12 @@
                 estado: formData.get('estado')
             };
 
-            console.log('📝 Datos del formulario:', data);
-            console.log('🔗 URL de destino:', GOOGLE_SHEETS_URL);
-
             // Disable submit button
             const submitBtn = document.querySelector('.submit-btn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Creando...';
 
             try {
-                console.log('📤 Enviando petición POST...');
-                
                 const response = await fetch(GOOGLE_SHEETS_URL, {
                     method: 'POST',
                     headers: {
@@ -1127,27 +1120,16 @@
                     body: JSON.stringify(data)
                 });
 
-                console.log('📥 Respuesta recibida:', response);
-                console.log('📊 Status:', response.status);
-                console.log('📋 Headers:', response.headers);
-
                 const result = await response.json();
-                console.log('📄 Resultado:', result);
 
                 if (result.success) {
-                    console.log('✅ Torneo creado exitosamente');
                     alert('¡Torneo creado exitosamente!');
                     closeCreateTournament();
                     loadTournaments(); // Reload tournaments list
                 } else {
-                    console.log('❌ Error del servidor:', result.error);
                     alert('Error al crear el torneo: ' + result.error);
                 }
             } catch (error) {
-                console.log('💥 Error de conexión:', error);
-                console.log('🔍 Tipo de error:', error.name);
-                console.log('📝 Mensaje:', error.message);
-                console.log('📚 Stack:', error.stack);
                 alert('Error de conexión: ' + error.message);
             } finally {
                 // Re-enable submit button
@@ -1158,25 +1140,14 @@
 
         // Function to load tournaments from Google Sheets
         async function loadTournaments() {
-            console.log('🔄 Cargando torneos...');
-            console.log('🔗 URL:', GOOGLE_SHEETS_URL);
-            
             try {
-                console.log('📤 Enviando petición GET...');
                 const response = await fetch(GOOGLE_SHEETS_URL);
-                
-                console.log('📥 Respuesta recibida:', response);
-                console.log('📊 Status:', response.status);
-                
                 const tournaments = await response.json();
-                console.log('📄 Torneos cargados:', tournaments);
                 
                 // Update the tournaments list
                 updateTournamentsList(tournaments);
             } catch (error) {
-                console.error('💥 Error cargando torneos:', error);
-                console.error('🔍 Tipo de error:', error.name);
-                console.error('📝 Mensaje:', error.message);
+                console.error('Error loading tournaments:', error);
             }
         }
 
